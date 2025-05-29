@@ -6,6 +6,32 @@ export class MyTodo extends LitElement {
             :host {
                 display: block;
             }
+
+            .task-container{
+                background-color:gray;
+                border-radius: 10px;
+                padding: 0.25em 0.5em 0.25em 0.5em;
+                margin: 0.5em;
+            }
+            
+            .task-title{
+                margin: 0.5em 0 0.5em 0;
+            }
+
+            hr{
+                margin: 0 0.5em 0 0.5em;
+            }
+            
+            .add-button{
+                margin: 0.5em 0 1em 0;
+            }
+
+            @media(max-width:480px){
+                .controllers{
+                    text-align:center;
+                }
+  
+            }
         `
     ];
 
@@ -23,7 +49,8 @@ export class MyTodo extends LitElement {
 
     constructor(){
         super();
-        this.tasks = [];
+        const savedTasks = localStorage.getItem('tasks');
+        this.tasks = savedTasks ? JSON.parse(savedTasks) : [];
         this.newTask = {
             title:'',
             description:''
@@ -36,20 +63,23 @@ export class MyTodo extends LitElement {
             this.tasks = [...this.tasks,{...this.newTask}
             ];
         this.newTask = {title:'',description:''};
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));    
         this.requestUpdate();    
         };
         this.titleInput.value="";
         this.descInput.value = "";
         console.log(this.tasks)
+
+
     };
 
     render() {
         return html`
-            
+            <hr>
             <div>
                 <div class="controllers">
                 <h2>Add a new task</h2>
-
+                <hr>
                 <form @submit=${this._handleSubmit}>
                     <input class="task-title" placeholder="Task title" .value=${this.newTask.title}
                     @input=${(e)=> this.newTask.title = e.target.value}
@@ -61,8 +91,14 @@ export class MyTodo extends LitElement {
                 </form>
                     
                 </div>
-
+                <hr>
                 <div class="task-list">
+                    ${this.tasks.map(task => html`
+                            <div class="task-container">
+                                <h3>${task.title}</h3>
+                                <p>${task.description}</p>
+                            </div>
+                        `)}
                 </div>
             </div>
         `;
