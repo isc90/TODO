@@ -8,7 +8,8 @@ export class MyTodo extends LitElement {
             }
 
             .task-container{
-                background-color:gray;
+                background-color:#29293d;
+                opacity: 75%;
                 border-radius: 10px;
                 padding: 0.25em 0.5em 0.25em 0.5em;
                 margin: 0.5em;
@@ -16,6 +17,7 @@ export class MyTodo extends LitElement {
             
             .task-title{
                 margin: 0.5em 0 0.5em 0;
+                opacity:100%;
             }
 
             hr{
@@ -24,12 +26,23 @@ export class MyTodo extends LitElement {
             
             .add-button{
                 margin: 0.5em 0 1em 0;
+                background-color: #0047b3;
+                padding:0.5em;
+                border:none;
+                border-radius: 0.25em;
             }
 
             @media(max-width:480px){
                 .controllers{
                     text-align:center;
                 }
+
+                .add-button{
+            
+                padding:1.5em;
+                border-radius: 0.25em;
+                width: 75%;
+            }
   
             }
         `

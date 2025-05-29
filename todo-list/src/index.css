@@ -20,7 +20,7 @@ body {
   flex-direction: column;
   align-content: center;
   justify-self: center;
-  min-width: 400px;
+  min-width: 75%;
   min-height: 100vh;
 }
 
