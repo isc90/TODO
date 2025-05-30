@@ -68,7 +68,24 @@ export class MyTodo extends LitElement {
                 margin: 0.5em 0 1em 0;
             }
 
+            .task-title-container{
+            
+                display:flex;
+                justify-content:space-between;
+            }
+
+            .complete-box{
+                padding: 1em 1em 0 0;
+            }
+                
+            .action-button-container-mobile{
+                display: none;
+            }
+
             @media(max-width:480px){
+
+               
+
                 .controllers{
                     text-align:center;
                     margin: 1em 0 0 0;
@@ -82,7 +99,7 @@ export class MyTodo extends LitElement {
             }
                 .title, .description{
                     margin-left: 0.5em;
-                }
+                }  
 
             .subheader{
                 text-align: center;
@@ -114,14 +131,20 @@ export class MyTodo extends LitElement {
             }
 
             .delete-button-mobile{
-                margin: 0.5em 0 1em 0;
+                
                 background-color: #e60000;
-                padding:0.5em;
+                padding: 1.5em;
                 border:none;
                 border-radius: 0.25em;
-                margin: 0.5em 0 1em 0;
                 width:100%;
             }
+
+            .action-button-container-mobile{
+                display: flex;
+                padding:1em;
+            }
+                
+    }
         `
     ];
 
@@ -209,14 +232,25 @@ export class MyTodo extends LitElement {
                 <div class="task-list">
                     ${this.tasks.map(task => html`
                             <div class="task-container">
-                                <h3 class="title">${task.title}</h3>
+                                    
+                                    <div class="task-title-container">
+                                        <div>
+                                            <h3 class="title">${task.title}</h3>
+                                        </div>
+
+                                        <div class="complete-box">
+                                            <label for="complete">Task complete</label>
+                                            <input type="radio" id="complete">
+                                        </div>
+                                    </div>
+                                
                                 <hr>
                                 <p class="description">${task.description}</p>
                             </div>
                         `)}
                 </div>
 
-                <div class="action-button-container">
+                <div class="action-button-container-mobile">
                     <button class="delete-button-mobile" @click=${this._wipeList}>Wipe To-Do list</button>
                 </div>
             </div>
