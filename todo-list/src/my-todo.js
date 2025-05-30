@@ -6,7 +6,19 @@ export class MyTodo extends LitElement {
             :host {
                 display: block;
             }
+             
+           .subheader{
+            margin-left: 1em;
+           }
 
+            .container{
+                padding: 0 0 1em 0;
+            }
+
+
+            .task-list{
+                margin-top: 1em;
+            }
             .task-container{
                 background-color:#29293d;
                 opacity: 75%;
@@ -15,6 +27,7 @@ export class MyTodo extends LitElement {
                 margin: 0.5em;
             }
             
+            
             .task-title{
                 margin: 0.5em 0 0.5em 0;
                 opacity:100%;
@@ -22,6 +35,15 @@ export class MyTodo extends LitElement {
 
             hr{
                 margin: 0 0.5em 0 0.5em;
+            }
+
+            .form-container{
+                display:flex;
+                justify-content: space-between;
+            }
+
+            .data-form{
+                margin: 1em 0 1em 1em;
             }
             
             .add-button{
@@ -32,9 +54,24 @@ export class MyTodo extends LitElement {
                 border-radius: 0.25em;
             }
 
+            
+            .action-button-container{
+                margin: 1em 1em 1em 0;
+            }
+
+            .delete-button{
+                margin: 0.5em 0 1em 0;
+                background-color: #e60000;
+                padding:0.5em;
+                border:none;
+                border-radius: 0.25em;
+                margin: 0.5em 0 1em 0;
+            }
+
             @media(max-width:480px){
                 .controllers{
                     text-align:center;
+                    margin: 1em 0 0 0;
                 }
 
                 .add-button{
@@ -43,7 +80,47 @@ export class MyTodo extends LitElement {
                 border-radius: 0.25em;
                 width: 75%;
             }
-  
+                .title, .description{
+                    margin-left: 0.5em;
+                }
+
+            .subheader{
+                text-align: center;
+                margin: 0 0 0 0;
+            }
+
+            .delete-button{
+                display:none;
+            }
+
+            .form-container{
+                display:flex;
+                justify-content:center;
+                align-content:center;
+            }
+            .data-form{
+                display: flex;
+                flex-direction: column;
+                gap:0.5em;
+                width:100%;
+            }
+
+            .add-button{
+                width:100%;
+            }
+
+            .task-title, .task-desc{
+                padding:1em;
+            }
+
+            .delete-button-mobile{
+                margin: 0.5em 0 1em 0;
+                background-color: #e60000;
+                padding:0.5em;
+                border:none;
+                border-radius: 0.25em;
+                margin: 0.5em 0 1em 0;
+                width:100%;
             }
         `
     ];
@@ -86,14 +163,29 @@ export class MyTodo extends LitElement {
 
     };
 
+    _wipeList(){
+
+        if(confirm("Do you wish to wipe your to-do list?")){
+             localStorage.clear();
+        this.tasks = [];
+        this.requestUpdate();
+        };
+    };
+
     render() {
         return html`
             <hr>
-            <div>
+            <div class="container">
                 <div class="controllers">
-                <h2>Add a new task</h2>
+
+                <div class="subheader">
+                    <h2>Add a new task</h2>
+                </div>
+                
                 <hr>
-                <form @submit=${this._handleSubmit}>
+                <div class="form-container">
+                <form @submit=${this._handleSubmit} class="data-form">
+                
                     <input class="task-title" placeholder="Task title" .value=${this.newTask.title}
                     @input=${(e)=> this.newTask.title = e.target.value}
                     >
@@ -101,17 +193,31 @@ export class MyTodo extends LitElement {
                     @input=${(e)=> this.newTask.description = e.target.value}
                     >
                     <button class="add-button" type="submit">Add Task</button>
-                </form>
                     
+                
+
+                    
+                </form>
+
+                 <div class="action-button-container">
+                    <button class="delete-button" @click=${this._wipeList}>Wipe To-Do list</button>
+                </div>
+                </div>
+               
                 </div>
                 <hr>
                 <div class="task-list">
                     ${this.tasks.map(task => html`
                             <div class="task-container">
-                                <h3>${task.title}</h3>
-                                <p>${task.description}</p>
+                                <h3 class="title">${task.title}</h3>
+                                <hr>
+                                <p class="description">${task.description}</p>
                             </div>
                         `)}
+                </div>
+
+                <div class="action-button-container">
+                    <button class="delete-button-mobile" @click=${this._wipeList}>Wipe To-Do list</button>
                 </div>
             </div>
         `;
