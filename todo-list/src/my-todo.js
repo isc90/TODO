@@ -82,6 +82,22 @@ export class MyTodo extends LitElement {
                 display: none;
             }
 
+            .task-container {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.task-container[completed] {
+  opacity: 0.6;
+}
+
+.task-container[completed] .title,
+.task-container[completed] .description {
+  text-decoration: line-through;
+  color: #888;
+}
+
+
             @media(max-width:480px){
 
                
@@ -166,7 +182,8 @@ export class MyTodo extends LitElement {
         this.tasks = savedTasks ? JSON.parse(savedTasks) : [];
         this.newTask = {
             title:'',
-            description:''
+            description:'',
+            completed:false
         };
     };
 
@@ -175,7 +192,7 @@ export class MyTodo extends LitElement {
         if(this.newTask.title.trim()){
             this.tasks = [...this.tasks,{...this.newTask}
             ];
-        this.newTask = {title:'',description:''};
+        this.newTask = {title:'',description:'',completed:false};
         localStorage.setItem('tasks', JSON.stringify(this.tasks));    
         this.requestUpdate();    
         };
@@ -185,6 +202,14 @@ export class MyTodo extends LitElement {
 
 
     };
+
+    _toggleTask(task){
+        task.completed = !task.completed;
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        this.requestUpdate();
+        console.log(task)    
+       
+    }
 
     _wipeList(){
 
@@ -231,7 +256,7 @@ export class MyTodo extends LitElement {
                 <hr>
                 <div class="task-list">
                     ${this.tasks.map(task => html`
-                            <div class="task-container">
+                            <div class="task-container" ?completed=${task.completed ? 'completed' : ''}>
                                     
                                     <div class="task-title-container">
                                         <div>
@@ -240,7 +265,7 @@ export class MyTodo extends LitElement {
 
                                         <div class="complete-box">
                                             <label for="complete">Task complete</label>
-                                            <input type="radio" id="complete">
+                                            <input type="checkbox" id="complete" .checked$={task.completed} @change=${()=> this._toggleTask(task)}>
                                         </div>
                                     </div>
                                 
