@@ -248,6 +248,8 @@ export class MyTodo extends LitElement {
                 </form>
 
                  <div class="action-button-container">
+                    <button class="pendind-button" @click=$>Show pending</button>
+                    <button class="completed-button" @click=$>Show completed</button>
                     <button class="delete-button" @click=${this._wipeList}>Wipe To-Do list</button>
                 </div>
                 </div>
