@@ -49,7 +49,7 @@ export class MyTodo extends LitElement {
             .add-button{
                 margin: 0.5em 0 1em 0;
                 background-color: #0047b3;
-                padding:0.5em;
+                
                 border:none;
                 border-radius: 0.25em;
             }
@@ -59,14 +59,26 @@ export class MyTodo extends LitElement {
                 margin: 1em 1em 1em 0;
             }
 
-            .delete-button{
-                margin: 0.5em 0 1em 0;
-                background-color: #e60000;
+            button{
+                margin: 0.5em 0 1em 0; 
                 padding:0.5em;
                 border:none;
                 border-radius: 0.25em;
                 margin: 0.5em 0 1em 0;
             }
+            
+            #delete-button{
+                background-color: #e60000;
+            }
+
+            #pending-button{
+                background-color: #fcac17;
+            }
+            
+            #completed-button{
+                background-color: #00cc00;
+            }
+
 
             .task-title-container{
             
@@ -105,13 +117,14 @@ export class MyTodo extends LitElement {
                 .controllers{
                     text-align:center;
                     margin: 1em 0 0 0;
+                    
                 }
 
-                .add-button{
+                button{
             
                 padding:1.5em;
                 border-radius: 0.25em;
-                width: 75%;
+                width: 100%;
             }
                 .title, .description{
                     margin-left: 0.5em;
@@ -122,42 +135,57 @@ export class MyTodo extends LitElement {
                 margin: 0 0 0 0;
             }
 
-            .delete-button{
+            #delete-button, #pending-button,#completed-button{
                 display:none;
             }
 
+            
             .form-container{
-                display:flex;
                 justify-content:center;
-                align-content:center;
             }
+            
+
             .data-form{
                 display: flex;
                 flex-direction: column;
-                gap:0.5em;
                 width:100%;
+                margin:1em;
             }
 
-            .add-button{
-                width:100%;
-            }
+           
 
             .task-title, .task-desc{
                 padding:1em;
             }
 
-            .delete-button-mobile{
-                
-                background-color: #e60000;
-                padding: 1.5em;
+            .add-button{
                 border:none;
                 border-radius: 0.25em;
-                width:100%;
+                
             }
+
+            #delete-button-mobile{
+                background-color: #e60000;
+            }
+
+            #pending-button-mobile{
+                background-color: #fcac17;
+            }
+
+            #completed-button-mobile{
+                background-color: #00cc00;
+            }
+
 
             .action-button-container-mobile{
                 display: flex;
+                flex-direction:column;
                 padding:1em;
+            }
+
+            .action-button-container{
+                margin:0;
+                padding:0;
             }
                 
     }
@@ -168,7 +196,8 @@ export class MyTodo extends LitElement {
 
     static properties = {
         tasks : {type:Array},
-        newTask : {type:Object}
+        newTask : {type:Object},
+        filtered: {type:Array}
     };
 
     firstUpdated(){
@@ -185,6 +214,7 @@ export class MyTodo extends LitElement {
             description:'',
             completed:false
         };
+        this.filtered = [...this.tasks]
     };
 
     _handleSubmit(e){
@@ -199,6 +229,7 @@ export class MyTodo extends LitElement {
         this.titleInput.value="";
         this.descInput.value = "";
         console.log(this.tasks)
+        this.filtered = [...this.tasks];
 
 
     };
@@ -219,6 +250,14 @@ export class MyTodo extends LitElement {
         this.requestUpdate();
         };
     };
+
+    _pendingTasks(){
+         this.filtered = this.tasks.filter((task) => task.completed == false);
+    }
+
+    _completedTasks(){
+        this.filtered = this.tasks.filter((task) => task.completed);
+    }
 
     render() {
         return html`
@@ -248,16 +287,17 @@ export class MyTodo extends LitElement {
                 </form>
 
                  <div class="action-button-container">
-                    <button class="pendind-button" @click=$>Show pending</button>
-                    <button class="completed-button" @click=$>Show completed</button>
-                    <button class="delete-button" @click=${this._wipeList}>Wipe To-Do list</button>
+                    <button id="completed-button" @click=${this._completedTasks}>Show completed</button>
+                    <button id="pending-button" @click=${this._pendingTasks}>Show pending</button>
+                    
+                    <button id="delete-button" @click=${this._wipeList}>Wipe To-Do list</button>
                 </div>
                 </div>
                
                 </div>
                 <hr>
                 <div class="task-list">
-                    ${this.tasks.map(task => html`
+                    ${this.filtered.map(task => html`
                             <div class="task-container" ?completed=${task.completed ? 'completed' : ''}>
                                     
                                     <div class="task-title-container">
@@ -278,7 +318,9 @@ export class MyTodo extends LitElement {
                 </div>
 
                 <div class="action-button-container-mobile">
-                    <button class="delete-button-mobile" @click=${this._wipeList}>Wipe To-Do list</button>
+                    <button id="completed-button-mobile" @click=${this._completedTasks}>Show completed</button>
+                    <button id="pending-button-mobile" @click=${this._pendingTasks}>Show pending</button>
+                    <button id="delete-button-mobile" @click=${this._wipeList}>Wipe To-Do list</button>
                 </div>
             </div>
         `;
